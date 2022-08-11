@@ -25,7 +25,7 @@ urls = [str(url) for url in range(2,8)]
 with open("vacancy_scraping.csv","w",encoding="utf8",newline="") as f:
 
             thewriter = writer(f)
-            header = ["Price for 2 days"]
+            header = ["Cottage","Price"]
             thewriter.writerow(header)
 
 
@@ -40,17 +40,20 @@ with open("vacancy_scraping.csv","w",encoding="utf8",newline="") as f:
 
                     soup = BeautifulSoup(page.content,"html.parser")
                     price = soup.find_all(name="span",class_="cartoucheDomain-priceValue")
+                    cottage_name = soup.find_all(name="span",class_="titleDomain")
+
                     print("")
                     print(date)
                     print("")
 
 
-                    for i in price:
+                    for cottage,price in zip(cottage_name,price):
 
-                        price = soup.find(name="span",class_="cartoucheDomain-priceValue").text
-                        thewriter.writerow(i)
-                        print(i.text)
+                        print(cottage.text,price.text)
                         days = "New round of stays"
+                        info = [cottage.text,price.text]
+                        thewriter.writerow(info)
+                        
 
                 thewriter.writerow(days)
 
